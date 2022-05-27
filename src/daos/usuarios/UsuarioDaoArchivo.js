@@ -21,21 +21,6 @@ class UserDaoFile extends ContainerFile {
 
         return users;
     }
-
-    getUserById(id) {
-	let user = this.getById()
-        return user;
-    }
-
-    deleteUserById(id){
-      let user = this.deleteById(id)
-      return user
-    }
-
-  updateUserById(id, updateUser){
-    let user = this.updateById(id, updateUser)
-    return user
-  }
 }
 
 module.exports = { UserDaoFile }
