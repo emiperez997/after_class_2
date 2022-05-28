@@ -2,23 +2,20 @@ const express = require('express')
 const { Router } = express
 const usersRouter = Router()
 
-// const { UserDaoFile } = require('../daos/usuarios/UsuarioDaoArchivo')
-// const userDao = new UserDaoFile()
+// const { ProductDaoFile } = require('../daos/usuarios/ProductDaoArchivo')
+// const productDao = new ProductDaoFile()
 
 // const { UserDaoMongo } = require('../daos/usuarios/UsuarioDaoMongo')
 // const userDao = new UserDaoMongo()
 
-const { UserDaoFirestore } = require('../daos/usuarios/UsuarioDaoFirestore')
-const userDao = new UserDaoFirestore()
+usersRouter.get('/', (req, res) => {
+  let users = userDao.getAll()
 
-usersRouter.get('/', async (req, res) => {
-  let users = await userDao.getAll()
-  console.log(users)
   res.json({users: users})
 })
 
-usersRouter.get('/:id', async (req, res) => {
-  let user = await userDao.getById(req.params.id)
+usersRouter.get('/:id', (req, res) => {
+  let user = userDao.getById(req.params.id)
   res.json({user})
 })
 
@@ -26,22 +23,22 @@ usersRouter.post('/', (req, res) => {
   let user = req.body
 
   if(user && user.name && user.email && user.age){
-    user = userDao.saveUser(user)
+    user = userDao.save(user.name, user.email, user.age)
     res.json({result: 'User saved', user: user})
   } else {
     res.json({result: 'User cannot saved'})
   }
 })
 
-usersRouter.delete('/:id', async (req, res) => {
+usersRouter.delete('/:id', (req, res) => {
   let { id } = req.params
-  user = await userDao.delete(id)
+  user = userDao.deleteById(id)
   res.json({result: 'Result', user_deleted: user})
 })
 
 usersRouter.put('/:id', (req, res) => {
   let user = req.body 
-  let response = userDao.updateUser(user, req.params.id)
+  let response = userDao.updateById(req.params.id, user)
   res.json(response)
 })
 

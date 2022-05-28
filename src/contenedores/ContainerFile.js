@@ -24,34 +24,35 @@ class ContainerFile {
     }
 
   getById(id){
-    let content = this.getContentFile()
-    let user = content.find(user => user.id == id)
-    return user
+    let contentArray = this.getContentFile()
+    let content = null
+    if(contentArray.length > 0){
+      let element = contentArray.find(elem => elem.id == id)
+    }
+    if(element){
+      content = element
+    }
+    return element
   }
 
     deleteById(id){
-      let content = this.getContentFile()
-      let user = content.find(user => user.id == id)
-      content.splice(user.id - 1, 1)
-      this.saveInFile(content)
-      return user
+      let contentArray = this.getContentFile()
+      if(contentArray.length > 0){
+	let newElementArray = contentArray.filter(elem => elem.id != id)
+	this.saveInFile(newElementArray)
+      }
+      return { status: 'Removed' }
     }
 
-  updateById(id, updateUser){
-    let content = this.getContentFile()
-    let user = content.map(user => {
-      if(user.id == id){
-	user.name = updateUser.name
-	user.email = updateUser.email
-	user.age = updateUser.age
-      }
-      return user
-    })
-    
-    this.saveInFile(user)
-    
-    return user.find(user => user.id == id)
-  }
+  updateById(id, content){
+    let contentArray = this.getContentFile()
+    let index = contentArray.findIndex(elem => elem.id === id)
+    if(index != -1) {
+      contentArray[index] = content
+      this.saveInFile(contentArray)
+    }
+      return content
+    }
 }
 
 module.exports = { ContainerFile }
